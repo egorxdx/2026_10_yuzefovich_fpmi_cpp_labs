@@ -19,26 +19,31 @@ int main() {
 	}
 
 	for (int i = 1; i < n; i++) {
-		std::cout << "   ";
+		std::cout << ' ' << ' ' << ' ';
 	}
-	
+
 	/*  int a = 1;
 		while(a < n) {
 		std::cout << "   ";
-		a += 1; 
+		a += 1;
 	}  */
 
 	for (int i = 1; i <= N; i++) {
 		if (i / 10 == 0) {
-			std::cout << ' ' << i << ' ';
+			std::cout << ' ' << ' ' << i;
 		}
 		else {
-			std::cout << i << ' ';
+			std::cout << ' ' << i;
 		}
 		n += 1;
 		if ((n - 1) % 7 == 0) {
 			std::cout << std::endl;
 		}
 	}
+
+	if ((n - 1) % 7 != 0) {
+		std::cout << std::endl;
+	}
+
 	return 0;
 }
