@@ -1,8 +1,8 @@
 #include <iostream>
-#include <cmath>
+#include <random>
 
-int create_xvect(int* arr, int i, int ran);
-int create_yvect(int* arr, int i, int ran);
+int create_xvect(int* arr, int i, int ran, std::mt19937& gen);
+int create_yvect(int* arr, int i, int ran, std::mt19937& gen);
 void print_xvect(int* arr, int n);
 void print_yvect(int* arr, int n);
 int find_zvect(int* xvect, int* yvect, int* zvect, int i, int scMult);
@@ -22,13 +22,13 @@ int main() {
 
 	//random ili net
 	int ran;
-	std::cout << "Vvedite 0 chtobi samomu sozdat massiv ili 1 chtobi randomizirovat\n";
+	std::cout << "Vvedite 0 chtobi samomu sozdat massiv ili luboe drugoe chislo chtobi randomizirovat\n";
 	std::cin >> ran;
-	if (!(ran == 0 && 1)) {
-		std::cout << "Nauchis chitat";
-		std::exit(-1);
-	}
 
+	//genereator randomnih chisel
+	std::mt19937 gen(346345);
+
+	//massivi
 	int xvect[MaxLength]{};
 	int yvect[MaxLength]{};
 	int zvect[MaxLength]{};
@@ -38,24 +38,24 @@ int main() {
 	if (ran == 0) {
 		std::cout << "Vvedite x vector\n";
 		for (int i = 0; i < n; i++) {
-			create_xvect(xvect, i, ran);
+			create_xvect(xvect, i, ran, gen);
 		}
 
 		std::cout << "Vvedite y vector\n";
 		for (int i = 0; i < n; i++) {
-			create_yvect(yvect, i, ran);
+			create_yvect(yvect, i, ran, gen);
 		}
 	}
 	//esli random
 	else {
 		for (int i = 0; i < n; i++) {
-			create_xvect(xvect, i, ran);
+			create_xvect(xvect, i, ran, gen);
 		}
 		std::cout << "x vector\n";
 		print_xvect(xvect, n);
 
 		for (int i = 0; i < n; i++) {
-			create_yvect(yvect, i, ran);
+			create_yvect(yvect, i, ran, gen);
 		}
 		std::cout << "y vector\n";
 		print_yvect(yvect, n);
@@ -76,26 +76,29 @@ int main() {
 	std::cout << "z vector\n";
 	print_zvect(zvect, n);
 
-
+	return 0;
 }
 
-int create_xvect(int* arr, int i, int ran) {
+int create_xvect(int* arr, int i, int ran, std::mt19937& gen) {
 	if (ran == 0) {
 		std::cin >> arr[i];
-		return arr[i];
+		
 	}
-	//else { randomizer tipo
-		//break;
-	//}
+	else { 
+		std::uniform_int_distribution<int> dist(-50, 50);
+		arr[i] = dist(gen);
+	}
+	return arr[i];
 }
-int create_yvect(int* arr, int i, int ran) {
+int create_yvect(int* arr, int i, int ran, std::mt19937& gen) {
 	if (ran == 0) {
 		std::cin >> arr[i];
-		return arr[i];
 	}
-	//else { randomizer tipo
-		//break;
-	//}
+	else { 
+		std::uniform_int_distribution<int> dist(-50, 50);
+		arr[i] = dist(gen);
+	}
+	return arr[i];
 }
 
 void print_xvect(int* arr, int n) {
