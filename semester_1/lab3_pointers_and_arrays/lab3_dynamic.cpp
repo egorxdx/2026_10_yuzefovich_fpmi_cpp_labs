@@ -1,59 +1,9 @@
 #include <iostream>
 #include <random>
 
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
-//include namespace std
 
-void create_xvect(int* arr, int n, int ran, int min, int max, std::mt19937& gen);
-void create_yvect(int* arr, int n, int ran, int min, int max, std::mt19937& gen);
+void create_vect(int* arr, int n, int ran, int min, int max, std::mt19937& gen);
+void print(int* arr, int n);
 void create_zvect(int* xvect, int* yvect, double* zvect, int n, double scMult);
 void print_zvect(double* arr, int n);
 
@@ -78,7 +28,10 @@ int main() {
 	int max = 1;
 	if (ran != 0) {
 		std::cout << "Vvedite min i max element\n";
-		std::cin >> min >> max;
+		if (!(std::cin >> min >> max) || (min > max)) {
+			std::cout << "min > max??";
+			std::exit(-2);
+		}
 	}
 
 	//randomizer
@@ -92,11 +45,13 @@ int main() {
 
 	//sozdanie x vectora
 	std::cout << "x vector\n";
-	create_xvect(xvect, n, ran, min, max, gen);
+	create_vect(xvect, n, ran, min, max, gen);
+	if (ran != 0) print(xvect, n);
 
 	//sozdanie y vectora
 	std::cout << "y vextor\n";
-	create_yvect(yvect, n, ran, min, max, gen);
+	create_vect(yvect, n, ran, min, max, gen);
+	if (ran != 0) print(yvect, n);
 
 	//scalyarnoe proizvedenie
 	double scMult = 0;
@@ -119,7 +74,7 @@ int main() {
 
 
 
-void create_xvect(int* arr, int n, int ran, int min, int max, std::mt19937& gen) {
+void create_vect(int* arr, int n, int ran, int min, int max, std::mt19937& gen) {
 	for (int i = 0; i < n; i++) {
 		if (ran == 0) {
 			std::cin >> arr[i];
@@ -127,22 +82,13 @@ void create_xvect(int* arr, int n, int ran, int min, int max, std::mt19937& gen)
 		else {
 			std::uniform_int_distribution<int> dist(min, max);
 			arr[i] = dist(gen);
-			std::cout << arr[i] << ' ';
 		}
 	}
-	std::cout << std::endl;
 }
 
-void create_yvect(int* arr, int n, int ran, int min, int max, std::mt19937& gen) {
+void print(int* arr, int n) {
 	for (int i = 0; i < n; i++) {
-		if (ran == 0) {
-			std::cin >> arr[i];
-		}
-		else {
-			std::uniform_int_distribution<int> dist(min, max);
-			arr[i] = dist(gen);
-			std::cout << arr[i] << ' ';
-		}
+		std::cout << arr[i] << ' ';
 	}
 	std::cout << std::endl;
 }

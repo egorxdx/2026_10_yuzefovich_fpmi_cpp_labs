@@ -1,11 +1,9 @@
 #include <iostream>
 #include <random>
 
-void create_xvect(int* arr, int i, int ran, std::mt19937& gen);
-void create_yvect(int* arr, int i, int ran, std::mt19937& gen);
-void print_xvect(int* arr, int n);
-void print_yvect(int* arr, int n);
-double find_zvect(int* xvect, int* yvect, double* zvect, int i, int scMult);
+void create_vect(int* arr, int i, int ran, int min, int max, std::mt19937& gen);
+void print(int* arr, int n);
+void find_zvect(int* xvect, int* yvect, double* zvect, int i, int scMult);
 void print_zvect(double* arr, int n);
 
 int main() {
@@ -28,30 +26,29 @@ int main() {
 	//genereator randomnih chisel
 	std::mt19937 gen(346345);
 
+	//min i max znacheniya
+	int min = 1, max = 1;
+	if (ran != 0) {
+		std::cout << "Min i max elem\n";
+		if (!(std::cin >> min >> max) || min > max) {
+			std::cout << "?";
+			std::exit(-1);
+		}
+	}
+
 	//massivi
 	int xvect[MaxLength]{};
 	int yvect[MaxLength]{};
 	double zvect[MaxLength]{};
 
 	//zadanie massivov
-	//esli vruchnuyu
-	if (ran == 0) {
-		std::cout << "Vvedite x vector\n";
-		create_xvect(xvect, n, ran, gen);
-
-		std::cout << "Vvedite y vector\n";
-		create_yvect(yvect, n, ran, gen);
-	}
-	//esli random
-	else {
-		create_xvect(xvect, n, ran, gen);
-		std::cout << "x vector\n";
-		print_xvect(xvect, n);
-
-		create_yvect(yvect, n, ran, gen);
-		std::cout << "y vector\n";
-		print_yvect(yvect, n);
-	}
+	std::cout << "x vector\n";
+	create_vect(xvect, n, ran, min, max, gen);
+	if (ran != 0) print(xvect, n);
+	
+	std::cout << "y vector\n";
+	create_vect(yvect, n, ran, min, max, gen);
+	if (ran != 0) print(yvect, n);
 
 	//nahozdenie scalyarnogo proizvedeniya
 	int scMult = 0;
@@ -60,9 +57,8 @@ int main() {
 	}
 
 	//nahozdenie z vectora
-	for (int i = 0; i < n; i++) {
-		find_zvect(xvect, yvect, zvect, i, scMult);
-	}
+	find_zvect(xvect, yvect, zvect, n, scMult);
+	
 
 	//vivod z vectora
 	std::cout << "z vector\n";
@@ -71,48 +67,31 @@ int main() {
 	return 0;
 }
 
-void create_xvect(int* arr, int n, int ran, std::mt19937& gen) {
+void create_vect(int* arr, int n, int ran, int min, int max, std::mt19937& gen) {
 	for (int i = 0; i < n; i++) {
 		if (ran == 0) {
 			std::cin >> arr[i];
 
 		}
 		else {
-			std::uniform_int_distribution<int> dist(-50, 50);
-			arr[i] = dist(gen);
-		}
-	}
-}
-void create_yvect(int* arr, int n, int ran, std::mt19937& gen) {
-	for (int i = 0; i < n; i++) {
-		if (ran == 0) {
-			std::cin >> arr[i];
-
-		}
-		else {
-			std::uniform_int_distribution<int> dist(-50, 50);
+			std::uniform_int_distribution<int> dist(min, max);
 			arr[i] = dist(gen);
 		}
 	}
 }
 
-void print_xvect(int* arr, int n) {
+
+void print(int* arr, int n) {
 	for (int i = 0; i < n; i++) {
 		std::cout << arr[i] << ' ';
 	}
 	std::cout << std::endl;
 }
 
-void print_yvect(int* arr, int n) {
+void find_zvect(int* xvect, int* yvect, double* zvect, int n, int scMult) {
 	for (int i = 0; i < n; i++) {
-		std::cout << arr[i] << ' ';
+		zvect[i] = sqrt((xvect[i] * xvect[i]) + (yvect[i] * yvect[i])) / (1.0 * scMult);
 	}
-	std::cout << std::endl;
-}
-
-double find_zvect(int* xvect, int* yvect, double* zvect, int i, int scMult) {
-	zvect[i] = sqrt((xvect[i] * xvect[i]) + (yvect[i] * yvect[i])) / (1.0 * scMult);
-	return zvect[i];
 }
 
 void print_zvect(double* arr, int n) {
