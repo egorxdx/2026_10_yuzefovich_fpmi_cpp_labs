@@ -1,91 +1,6 @@
 #include <iostream>
 #include <random>
 
-
-void create_vect(int* arr, int n, int ran, int min, int max, std::mt19937& gen);
-void print(int* arr, int n);
-void create_zvect(int* xvect, int* yvect, double* zvect, int n, double scMult);
-void print_zvect(double* arr, int n);
-
-int main() {
-	//razmer massiva
-	int n;
-	std::cout << "Vvedite chislo elementov massiva\n";
-	std::cin >> n;
-
-	if (n < 0) {
-		std::cout << "?";
-		std::exit(-1);
-	}
-
-	//random ili net
-	int ran;
-	std::cout << "Vvedite 0 dlya sozdaniya massiva vruchnuyu\n";
-	std::cin >> ran;
-
-	//min i max elementi
-	int min = 1;
-	int max = 1;
-	if (ran != 0) {
-		std::cout << "Vvedite min i max element\n";
-		if (!(std::cin >> min >> max) || (min > max)) {
-			std::cout << "min > max??";
-			std::exit(-2);
-		}
-	}
-
-	//randomizer
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	
-	//massivi
-	int* xvect = new int[n] {};
-	int* yvect = new int[n] {};
-	double* zvect = new double[n] {};
-
-	//sozdanie x vectora
-	std::cout << "x vector\n";
-	create_vect(xvect, n, ran, min, max, gen);
-	if (ran != 0) print(xvect, n);
-
-	//sozdanie y vectora
-	std::cout << "y vextor\n";
-	create_vect(yvect, n, ran, min, max, gen);
-	if (ran != 0) print(yvect, n);
-
-	//scalyarnoe proizvedenie
-	double scMult = 0;
-	for (int i = 0; i < n; i++) {
-		scMult += xvect[i] * yvect[i];
-	}
-
-	//sozdanie z vectora
-	create_zvect(xvect, yvect, zvect, n, scMult);
-	std::cout << "z vector\n";
-	print_zvect(zvect, n);
-
-	//otchistka pamyati
-	delete[] xvect;
-	delete[] yvect;
-	delete[] zvect;
-	
-	return 0;
-}
-
-
-
-void create_vect(int* arr, int n, int ran, int min, int max, std::mt19937& gen) {
-	for (int i = 0; i < n; i++) {
-		if (ran == 0) {
-			std::cin >> arr[i];
-		}
-		else {
-			std::uniform_int_distribution<int> dist(min, max);
-			arr[i] = dist(gen);
-		}
-	}
-}
-
 void print(int* arr, int n) {
 	for (int i = 0; i < n; i++) {
 		std::cout << arr[i] << ' ';
@@ -93,14 +8,60 @@ void print(int* arr, int n) {
 	std::cout << std::endl;
 }
 
-void create_zvect(int* xvect, int* yvect, double* zvect, int n, double scMult) {
+void create1(int* arr, int n) {
 	for (int i = 0; i < n; i++) {
-		zvect[i] = sqrt((xvect[i] * xvect[i]) + (yvect[i] * yvect[i])) / scMult;
+		std::cin >> arr[i];
 	}
 }
 
-void print_zvect(double* arr, int n) {
+void create2(int* arr, int n, int min, int max, std::mt19937 gen) {
+	std::uniform_int_distribution<int> dist(min, max);
 	for (int i = 0; i < n; i++) {
-		std::cout << arr[i] << ' ';
+		arr[i] = dist(gen);
 	}
+}
+
+void func(int* arr, int n) {
+	for (int i = 0; i < n - 1; i++) {
+		if (arr[i] == arr[i + 1]) {
+			arr[i] = 0;
+		}
+	}
+}
+
+
+int main() {
+	int n;
+	std::cout << "Number of elements\n";
+	if (!(std::cin >> n) || n < 0){
+		std::exit(-1);
+	}
+
+	int ran;
+	std::cout << "if 0 random else not\n";
+	std::cin >> ran;
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	int min = 0, max = 1;
+	if (ran != 0) {
+		std::cout << "min i max\n";
+		if (!(std::cin >> min >> max) || min > max) std::exit(-2);
+	}
+
+	int* arr = new int[n];
+
+	if (ran == 0) create1(arr, n);
+	
+	if (ran != 0) {
+		create2(arr, n, min, max, gen);
+		print(arr, n);
+	}
+
+	func(arr, n);
+	print(arr, n);
+
+
+	delete[] arr;
 }
