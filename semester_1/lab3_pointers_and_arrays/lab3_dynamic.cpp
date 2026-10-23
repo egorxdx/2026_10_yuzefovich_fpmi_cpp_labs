@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <algorithm>
 
 void print(int* arr, int n) {
 	for (int i = 0; i < n; i++) {
@@ -25,6 +26,16 @@ void func(int* arr, int n) {
 	for (int i = 0; i < n - 1; i++) {
 		if (arr[i] == arr[i + 1]) {
 			arr[i] = 0;
+		}
+	}
+}
+
+void sort(int* arr, int n) {
+	for (int i = 0; i < n - 1; i++) {
+		for (int j = 0; j < n - 1; j++) {
+			if (arr[j] == 0 && arr[j + 1] != 0) {
+				std::swap(arr[j], arr[j + 1]);
+			}
 		}
 	}
 }
@@ -60,6 +71,7 @@ int main() {
 	}
 
 	func(arr, n);
+	sort(arr, n);
 	print(arr, n);
 
 

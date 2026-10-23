@@ -2,129 +2,134 @@
 #include <random>
 #include <iomanip>
 
-void create_matr(int** matr, int n, int m, int ran);
-void print(int** matr, int n, int rowInd, int m, int colInd);
-void maxHistogram(int** matr, int n, int m);
+void initial(int**& matr, int n, int m) {
+	matr = new int* [n];
+	for (int i = 0; i < n; i++) {
+		matr[i] = new int [m];
+	}
+}
 
-int main() {
+void create1(int** matr, int n, int m) {
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			std::cin >> matr[i][j];
+		}
+	}
+}
+
+void create2(int** matr, int n, int m) {
+	std::cout << "Enter min i max\n";
+	int min, max;
+	if (!(std::cin >> min >> max) && min > max) std::exit(-234);
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dist(min, max);
 	
-	int n, m;
-	std::cout << "Vvedite kolichestvo strok (n) i stobcov (m)\n";
-	if (!(std::cin >> n >> m) || n <= 0 || m <= 0) {
-		std::cout << "Vvedite normalniy razmer";
-		std::exit(-1);
-	}
-
-	int ran;
-	std::cout << "Vvedite 0 dlya zadaniya matrici vruchnuyu\n";
-	std::cin >> ran;
-
-	int** matr = new int* [n];
 	for (int i = 0; i < n; i++) {
-		matr[i] = new int[m];
-	}
-
-	create_matr(matr, n, m, ran);
-	if (ran != 0) {
-		std::cout << "matrix\n";
-		print(matr, n, 0, m, 0);
-	}
-
-	maxHistogram(matr, n, m);
-
-
-	for (int i = 0; i < n; i++) {
-		delete[] matr[i];
-	}
-	delete[] matr;
-	return 0;
-}
-
-void create_matr(int** matr, int n, int m, int ran) {
-	if (ran == 0) {
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				std::cin >> matr[i][j];
-			}
-		}
-	}
-	else {
-		//min i max elem
-		int min, max;
-		std::cout << "Vvedite min i max elem\n";
-		if (!(std::cin >> min >> max) || min > max) {
-			std::cout << "?";
-			std::exit(-2);
-		}
-
-		//randomizer
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<int> dist(min, max);
-		
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				matr[i][j] = dist(gen);
-			}
+		for (int j = 0; j < m; j++) {
+			matr[i][j] = dist(gen);
 		}
 	}
 }
 
-void print(int** matr, int n, int rowInd, int m, int colInd) {
-	for (int i = rowInd; i < n; i++) {
-		for (int j = colInd; j < m; j++) {
+void print(int** matr, int n, int m) {
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
 			std::cout << std::setw(3) << matr[i][j] << ' ';
 		}
 		std::cout << std::endl;
 	}
-	std::cout << std::endl;
 }
 
-void maxHistogram(int** matr, int n, int m) {
-	int max_area = 0; //max histogram
-	int max_height = 0;
-	int max_width = 0;
-	int best_r = -1; // koord stroki elem 
-	int best_q = -1; // koord stobca elem
+void print(int** matr, int i_ind, int p, int j_ind, int q) {
+	for (int i = i_ind; i < i_ind + p; i++) {
+		for (int j = j_ind; j < j_ind + q; j++) {
+			std::cout << std::setw(3) << matr[i][j] << ' ';
+		}
+		std::cout << std::endl;
+	}
+}
+
+void del(int** matr, int n) {
+	for (int i = 0; i < n; i++) {
+		delete[] matr[i];
+	}
+	delete[] matr;
+}
+
+void subMatr(int** matr, int n, int m) {
+	int q_ind;
+	int max_area = 0, area = 0;
+	int length = 0, height = 0;
+	int p = 0, q = 0;
+	int i_ind = -1, j_ind = -1;
 
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
-			if (matr[i][j] > 0) {
-				int max_length = m - j;
+			int end = m - 1;
 
-				// nahojdenie plochadi max histogrami
-				for (int r = 1; r + i - 1 < n; r++) { // prohodka po strokam
-					
-					// nahojdenie max width
-					int q = 0;
-					while ((q < max_length) && (matr[r + i - 1][q + j] > 0)) {
-						q++;
-					}
-					
-					max_length = q;
-					if (max_length == 0) break;
+			for (int p_ind = i; p_ind < n; p_ind++) {
+				if (matr[p_ind][j] <= 0) break;
 
-					int area = r * q;
+				q_ind = j;
+				while(q_ind <= end && matr[p_ind][q_ind] > 0) {
+					q_ind++;
+				}
+				q_ind--;
+				end = q_ind;
 
-					if (area > max_area) {
-						max_area = area;
-						max_height = r;
-						max_width = q;
-						best_r = i;
-						best_q = j;
-					}
+				height = p_ind - i + 1;
+				length = q_ind - j + 1;
+				area = length * height;
+
+				if (area > max_area) {
+					max_area = area;
+					p = height;
+					q = length;
+					i_ind = i;
+					j_ind = j;
 				}
 			}
 		}
 	}
 	if (max_area == 0) {
-		std::cout << "Vse elem <0";
-		std::exit(0);
+		std::cout << "No positive elements";
 	}
 	else {
-		std::cout << "Razmer matrici: " << max_height << ' ' << max_width << std::endl;
-		std::cout << "Koord levogo verhnego elem: " << best_r << ' ' << best_q << std::endl;
-		std::cout << "Matrica P\n";
-		print(matr, best_r + max_height, best_r, best_q + max_width, best_q);
+		std::cout << "Max submatrix\n" << "height " << p << std::endl
+			<< "length " << q << std::endl
+			<< "pos of first elem " << i_ind << ' ' << j_ind << std::endl
+			<< "submatrix:\n";
+		print(matr, i_ind, p, j_ind, q);
 	}
+}
+
+int main() {
+	int n, m;
+	std::cout << "Enter size of matrix (n) >> (m)\n";
+	if (!(std::cin >> n >> m) && n < 1 && m < 1) std::exit(-12);
+
+	int ran;
+	std::cout << "Enter 0 if not random\n";
+	std::cin >> ran;
+
+	int** matr;
+	initial(matr, n, m);
+
+
+	if (ran == 0) {
+		std::cout << "Enter matrix\n";
+		create1(matr, n, m);
+	}
+	else {
+		create2(matr, n, m);
+		std::cout << "Matrix\n";
+		print(matr, n, m);
+	}
+
+	subMatr(matr, n, m);
+
+	del(matr, n);
+	return 0;
 }
