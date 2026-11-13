@@ -1,0 +1,26 @@
+11/11/26 21:51:02 | program started
+11/11/26 21:51:02 | opening file "input.txt"
+11/11/26 21:51:02 | file "input.txt" has been opened successfully
+11/11/26 21:51:02 | reading lines from "input.txt"
+11/11/26 21:51:02 | got line: "dafda 12,fhh:123;113 11"
+11/11/26 21:51:02 | got line: "hello 2 world 4 7 test 17!"
+11/11/26 21:51:02 | got line: "no primes 4 6 8 9 "
+11/11/26 21:51:02 | got line: "primes 3 5 2 89 23 13"
+11/11/26 21:51:02 | got line: "jkdf13jkdf23h24"
+11/11/26 21:51:02 | got line: "afd 13 df 14 df 13 23 h 3"
+11/11/26 21:51:02 | finding prime numbers in line
+11/11/26 21:51:02 | numbers found 113 11 
+11/11/26 21:51:02 | finding prime numbers in line
+11/11/26 21:51:02 | numbers found 2 7 17 
+11/11/26 21:51:02 | finding prime numbers in line
+11/11/26 21:51:02 | numbers not found 
+11/11/26 21:51:02 | finding prime numbers in line
+11/11/26 21:51:02 | numbers found 3 5 2 89 23 13 
+11/11/26 21:51:02 | finding prime numbers in line
+11/11/26 21:51:02 | numbers found 13 23 
+11/11/26 21:51:02 | finding prime numbers in line
+11/11/26 21:51:02 | numbers found 13 13 23 3 
+11/11/26 21:51:02 | opening file "output.txt"
+11/11/26 21:51:02 | file "output.txt" has been opened successfully
+11/11/26 21:51:02 | writing lines to "output.txt"
+11/11/26 21:51:02 | program has ended with code 0
